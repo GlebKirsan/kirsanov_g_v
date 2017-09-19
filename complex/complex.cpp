@@ -5,6 +5,7 @@ double eps(1e-14);
 struct Complex {
 	Complex() {}
 	explicit Complex(const double real);
+	~Complex() = default;
 	Complex(const double real, const double imaginary);
 	bool operator==(const Complex& rhs) const { return (abs(re - rhs.re) < eps) && (abs(im - rhs.im) < eps); }
 	bool operator!=(const Complex& rhs) const { return !operator==(rhs); }
@@ -13,16 +14,36 @@ struct Complex {
 		im += rhs.im;
 		return *this;
 	}
+	Complex& operator=(const Complex& rhs) {
+		re = rhs.re;
+		im = rhs.im;
+		return *this;
+	}
 	Complex& operator-=(const Complex& rhs) {
 		re += rhs.re;
 		im += rhs.im;
 		return *this;
 	}
-	Complex& operator*=(const Complex& rhs) { return operator*(*this, rhs); }
+	Complex& operator*=(const Complex& rhs);
 	Complex& operator+=(const double rhs) { return operator+=(Complex(rhs)); }
 	Complex& operator-=(const double rhs) { return operator-=(Complex(rhs)); }
 	Complex& operator*=(const double rhs) { return operator*=(rhs); }
-	Complex& operator/(const Complex& lhs, const double rhs) { return lhs / Complex*(rhs); }
+	Complex& operator/=(const Complex& rhs) {
+	if (abs(rhs.im) < eps && abs(rhs.re) < eps) {
+		cout << "division by zero";
+	}
+	double ansr(0.0);
+	double ansi(0.0);
+	double den = rhs.re * rhs.re + rhs.im * rhs.im;
+	ansr = (rhs.re * this->re + rhs.im * this->im) / den;
+	ansi = (rhs.re * this->im - rhs.im * this->re) / den;
+	re = ansr;
+	im = ansi;
+	return *this;
+}
+	Complex& operator-() {
+		return Complex(-re, -im);
+	}
 	ostream& writeTo(ostream& ostrm) const;
 	istream& readFrom(istream& istrm);
 	double re{ 0.0 };
@@ -30,7 +51,9 @@ struct Complex {
 	static const char leftBrace{ '{' };
 	static const char separator{ ',' };
 	static const char rightBrace{ '}' };
-	double length() const;
+	double length() {
+		return sqrt(re * re + im * im);
+	}
 };
 inline ostream& operator<<(ostream& ostrm, const Complex& rhs) {
 	return rhs.writeTo(ostrm);
@@ -49,6 +72,14 @@ Complex operator*(const Complex& lhs, const Complex& rhs) {
 	double b = lhs.re * rhs.im + lhs.im * rhs.re;
 	return Complex(a, b);
 }
+Complex& Complex::operator*=(const Complex& rhs) {
+	return operator*(*this, rhs);
+}
+Complex operator/(const Complex& lhs, const Complex& rhs) {
+	Complex newone(lhs);
+	newone /= rhs;
+	return newone;
+}
 bool testParse(const string& str) {
 	istringstream istrm(str);
 	Complex z;
@@ -64,9 +95,12 @@ bool testParse(const string& str) {
 int main() {
 	Complex z, v, b(4, 5);
 	z += Complex(8.0);
+	z = -z;
 	testParse("{8.9,9}");
 	testParse("{8.9, 9}");
 	testParse("{8.9,9");
+	v = z / b;
+	cout << v.re << " " << v.im;
 	return 0;
 }
 Complex::Complex(const double real) : Complex(real, 0.0) {}
