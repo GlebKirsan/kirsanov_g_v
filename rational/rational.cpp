@@ -1,78 +1,117 @@
+#include "rational.h"
 #include <iostream>
-#define eps 1e-12
-using namespace std;
-int gcd(int a, unsigned int b) {
-	return b ? gcd(b, a % b) : a;
+#include <cmath>
+int gcd(int a, int b) {
+	while (b) b ^= a ^= b ^= a %= b;
+	return abs(a);
 }
-class Rational {
-public:
-	Rational() = default;
-	Rational(const int numerator) :num(numerator) {}
-	Rational(const int numerator, const unsigned int denominator):
-		num(numerator),
-		den(denominator) {
-		if (den == 0) {
-			throw std::runtime_error("zero division error");
+
+Rational& Rational::normalize() {
+	int nod = gcd(num, den);
+	num /= nod;
+	den /= nod;
+	return *this;
+}
+
+bool Rational::operator==(const Rational& a) {
+	return num == a.num && den == a.den;
+}
+
+Rational& Rational::operator-() {
+	num = -num;
+	return *this;
+}
+
+Rational& Rational::operator+=(const Rational& a) {
+	int nod = gcd(a.den, den);
+	int nok = a.den / nod*den;
+	int mult0 = nok / den;
+	int mult1 = nok / a.den;
+	den = nok;
+	num *= mult0;
+	num += a.num * mult1;
+	normalize();
+	return *this;
+}
+Rational& Rational::operator+=(const int a) {
+	return operator+=(Rational(a));
+}
+
+Rational& Rational::operator-=(const Rational& a) {
+	Rational c(a);
+	return operator+=(-c);
+}
+Rational& Rational::operator-=(const int a) {
+	Rational c(a);
+	return operator+=(-c);
+}
+
+Rational& Rational::operator*=(const Rational& a) {
+	num *= a.num;
+	den *= a.den;
+	normalize();
+	return *this;
+}
+Rational& Rational::operator*=(const int a) {
+	return operator*=(Rational(a));
+}
+
+Rational& Rational::operator/=(const Rational& a) {
+	return operator*=(Rational(a.den, a.num));
+}
+Rational& Rational::operator/=(const int a) {
+	return operator*=(Rational(1, a));
+}
+
+Rational operator+(const Rational& a, const Rational& b) {
+	Rational c(a);
+	c += b;
+	return c;
+}
+Rational operator-(const Rational& a, const Rational& b) {
+	Rational c(a);
+	c -= b;
+	return c;
+}
+Rational operator*(const Rational& a, const Rational& b) {
+	Rational c(a);
+	c *= b;
+	return c;
+}
+Rational operator/(const Rational& a, const Rational& b) {
+	Rational c(a);
+	c /= b;
+	return c;
+}
+
+Rational operator+(const Rational& a, const int b) {
+	return operator+(a, Rational(b));
+}
+Rational operator-(const Rational& a, const int b) {
+	return operator-(a, Rational(b));
+}
+Rational operator*(const Rational& a, const int b) {
+	return operator*(a, Rational(b));
+}
+Rational operator/(const Rational& a, const int b) {
+	return operator/(a, Rational(b));
+}
+
+std::ostream& Rational::writeTo(std::ostream& ost) const{
+	ost << num << sep0 << den;
+	return ost;
+}
+std::istream& Rational::readFrom(std::istream& ist) {
+	char sep(0);
+	int numen(0);
+	int denom(0);
+	ist >> numen >> sep >> denom;
+	if (ist.good())
+		if (Rational::sep0 == sep || Rational::sep1 == sep0) {
+			num = numen;
+			den = denom;
 		}
-		int nod = gcd(num, den);
-		num /= nod;
-		den /= nod;
-	}
-	~Rational() = default;
-	void print() {
-		if (den == 1) {
-			cout << num << endl;
-			return;
-		}
-		if (num > den) {
-			int integ = num / den;
-			num -= integ * den;
-			cout << integ << " "; 
-		}
-		cout << num << "/" << den << endl;
-		return;
-	}
-	Rational& operator=(const Rational& a) {
-		this->den = a.den;
-		this->num = a.num;
-		return *this;
-	}
-	Rational& operator+(const Rational& r) {
-		Rational ans;
-		int nod = gcd(this->den, r.den);
-		ans.den = this->den / (nod == 1 ? (fabs(this->den - r.den) < eps ? this->den : r.den) : nod) * r.den;
-		int numer1 = ans.den / this->den * this->num;
-		int numer2 = ans.den / r.den * r.num;
-		ans.num = numer1 + numer2;
-		return ans;
-	}
-	Rational& operator+(const double a) {
-		return (*this + Rational(a));
-	}
-	Rational& operator*(const Rational& r) {
-		return Rational(r.num * this->num, r.den * this->den);
-	}
-	Rational& operator*(const int r) {
-		return Rational(this->num * r, this->den);
-	}
-	Rational& operator-()  {
-		num *= -1;
-		return *this;
-	}
-	Rational& operator-(Rational& r) {
-		return (*this + (-r));
-	}
-private:
-	int num{ 0 };
-	unsigned int den{ 1 };
-	
-};
-int main() {
-	Rational a{ 4, 5 };
-	Rational b{ 8, 4 };
-	a.print();
-	b.print();
-	Rational newone{ a + b };
-	newone.print();
-	return 0;
+		else
+			ist.setstate(std::ios_base::failbit);
+	return ist;
 }
