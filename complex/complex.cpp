@@ -1,12 +1,14 @@
 #include <iostream>
 #include "complex.h"
 #include <cmath>
+#include <algorithm>
+
 double eps(1e-7);
 double pi(3.1415926);
 bool Complex::operator==(const Complex a) { 
-	double compre = fabs(re - a.re);
-	double compim = fabs(im - a.im);
-	return compre < eps && compim < eps;
+	double compr = fabs(re - a.re);
+	double compi = fabs(im - a.im);
+	return compr < eps && compi < eps;
 }
 Complex& Complex::operator-() {
 	re = -re;
@@ -58,6 +60,7 @@ Complex& Complex::operator=(const Complex& a) {
 	im = a.im;
 	return *this;
 }
+
 Complex operator+(const Complex& a, const Complex& b) {
 	Complex c(a);
 	c += b;
@@ -68,20 +71,54 @@ Complex operator/(const Complex& a, const Complex& b) {
 	c /= b;
 	return c;
 }
-Complex operator/(const Complex& a, const double b) {
-	return a / Complex(b);
-}
 Complex operator*(const Complex& a, const Complex& b) {
-	Complex c(a);
-	c *= b;
-	return c;
+    Complex c(a);
+    c *= b;
+    return c;
+}
+Complex operator-(const Complex& a, Complex b) {
+    return operator+(a, -b); }
+
+Complex operator+(const Complex& a, const double b){
+    return operator+(a, Complex(b));
+}
+Complex operator-(const Complex& a, const double b) {
+    return a + Complex(-b);
 }
 Complex operator*(const Complex& a, const double b) {
-	return a * Complex(b);
+    return a * Complex(b);
 }
-Complex operator+(const Complex& a, const double b) { return operator+(a, Complex(b)); }
-Complex operator-(const Complex& a, Complex b) { return operator+(a, -b); }
-Complex operator-(const Complex& a, const double b) { return a + Complex(-b); }
+Complex operator/(const Complex& a, const double b) {
+    return a / Complex(b);
+}
+
+Complex operator+(const double a, const Complex& b){
+    return operator+(Complex(a), b);
+}
+Complex operator-(const double a, const Complex& b){
+    return operator-(Complex(a), b);
+}
+Complex operator*(const double a, const Complex& b){
+    return operator*(Complex(a), b);
+}
+Complex operator/(const double a, const Complex& b){
+    return operator/(Complex(a), b);
+}
+
+
+std::vector<Complex> Complex::roots(int poW) {
+    std::vector<Complex> answer;
+    double module = this->length();
+    double modW = pow(module, 1/poW);
+    double phi = atan(im/re);
+    for (int k{0}; k < poW; k++) {
+        double trigArg = std::min(1.0, (phi + 2 * pi * k)/poW);
+        double x = modW * cos(trigArg);
+        double y = modW * sin(trigArg);
+        answer.push_back(Complex(x,y));
+    }
+    return answer;
+}
 double Complex::length() {
 	return sqrt(re * re + im * im);
 }

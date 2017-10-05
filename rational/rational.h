@@ -9,7 +9,13 @@ public:
 	~Rational() = default;
 	explicit Rational(const int num, const int den) : num(num), den(den) { normalize(); };
 	bool operator==(const Rational& a);
-	bool operator!=(const Rational& a) { return !operator==(a); }
+	bool operator!=(const Rational& a) {
+		return !operator==(a);
+	}
+	bool operator<(const Rational& a);
+	bool operator>(const Rational& a);
+	bool operator<=(const Rational& a);
+	bool operator>=(const Rational& a);
 	Rational& operator+=(const Rational& a);
 	Rational& operator+=(const int a);
 	Rational& operator-=(const Rational& a);
@@ -21,8 +27,8 @@ public:
 	Rational& operator-();
 	std::istream& readFrom(std::istream& ist);
 	std::ostream& writeTo(std::ostream& ost)const;
-private:
 	Rational& normalize();
+private:
 	int num{ 0 },
 		den{ 1 };
 	static const char sep0{ '/' };
@@ -38,6 +44,11 @@ Rational operator+(const Rational& a, const int b);
 Rational operator-(const Rational& a, const int b);
 Rational operator*(const Rational& a, const int b);
 Rational operator/(const Rational& a, const int b);
+
+Rational operator+(const int a, const Rational& b);
+Rational operator-(const int a, const Rational& b);
+Rational operator*(const int a, const Rational& b);
+Rational operator/(const int a, const Rational& b);
 
 inline std::ostream& operator<<(std::ostream& ost, const Rational& a) {
 	return a.writeTo(ost);

@@ -1,5 +1,4 @@
 #include "rational.h"
-#include <iostream>
 #include <cmath>
 int gcd(int a, int b) {
 	while (b) b ^= a ^= b ^= a %= b;
@@ -16,7 +15,18 @@ Rational& Rational::normalize() {
 bool Rational::operator==(const Rational& a) {
 	return num == a.num && den == a.den;
 }
+bool Rational::operator<(const Rational& a){
 
+}
+bool Rational::operator>(const Rational& a){
+
+}
+bool Rational::operator<=(const Rational& a){
+
+}
+bool Rational::operator>=(const Rational& a){
+
+}
 Rational& Rational::operator-() {
 	num = -num;
 	return *this;
@@ -97,6 +107,19 @@ Rational operator/(const Rational& a, const int b) {
 	return operator/(a, Rational(b));
 }
 
+Rational operator+(const int a, const Rational& b){
+    return operator+(Rational(a),b);
+}
+Rational operator-(const int a, const Rational& b){
+    return operator-(Rational(a),b);
+}
+Rational operator*(const int a, const Rational& b){
+        return operator*(Rational(a),b);
+    }
+Rational operator/(const int a, const Rational& b){
+    return operator/(Rational(a),b);
+}
+
 std::ostream& Rational::writeTo(std::ostream& ost) const{
 	ost << num << sep0 << den;
 	return ost;
@@ -105,13 +128,13 @@ std::istream& Rational::readFrom(std::istream& ist) {
 	char sep(0);
 	int numen(0);
 	int denom(0);
-	ist >> numen >> sep >> denom;
-	if (ist.good())
-		if (Rational::sep0 == sep || Rational::sep1 == sep0) {
+	if (ist >> numen >> sep >> denom) {
+		if (Rational::sep0 == sep || Rational::sep1 == sep) {
 			num = numen;
 			den = denom;
 		}
 		else
 			ist.setstate(std::ios_base::failbit);
+	}
 	return ist;
 }

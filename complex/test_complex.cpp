@@ -20,9 +20,16 @@ void checker(double re0, double im0, double re1, double im1) {
 	cout << "*= check: a *= b = " << a << endl;
 	a /= b;
 	cout << "+= check: a /= b = " << a << endl;
-	cout << "Zero divivsion check " <<  endl;
+	cout << "Zero division check " <<  endl;
 	cout << a << " / " << zeroTest << " = " << (a / zeroTest) << endl;
+	cout << "Exponential form – ";
+	a.exponentialForm();
 	cout << "\n\n";
+    vector<Complex> t;
+    t = Complex(1, 4).roots(6);
+    for (auto &p: t)
+        cout << p << " ";
+    cout << endl;
 }
 bool testParse(const string& str) {
 	istringstream istrm(str);

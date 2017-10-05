@@ -1,6 +1,8 @@
 #ifndef COMPLEX_2209
 #define COMPLEX_2209
 #include <iostream>
+#include <vector>
+
 struct Complex {
 	Complex() {}
 	Complex(const Complex& a) = default;
@@ -19,6 +21,7 @@ struct Complex {
 	Complex& operator/=(const Complex& a);
 	Complex& operator/=(const double a);
 	Complex& operator-();
+    std::vector<Complex> roots(int poW);
 	void exponentialForm();
 	std::ostream& writeTo(std::ostream& ostr)const;
 	std::istream& readFrom(std::istream& istr);
@@ -31,12 +34,20 @@ struct Complex {
 };
 Complex operator+(const Complex& a, const Complex& b);
 Complex operator+(const Complex& a, const double b);
+Complex operator+(const double a, const Complex& b);
+
 Complex operator-(const Complex& a, Complex b);
 Complex operator-(const Complex& a, const double b);
+Complex operator-(const double a, const Complex& b);
+
 Complex operator/(const Complex& a, const Complex& b);
 Complex operator/(const Complex& a, const double b);
+Complex operator/(const double a, const Complex& b);
+
 Complex operator*(const Complex& a, const Complex& b);
 Complex operator*(const Complex& a, const double b);
+Complex operator*(const double a, const Complex& b);
+
 inline std::ostream& operator<<(std::ostream& ostr, const Complex& a) {
 	return a.writeTo(ostr);
 }

@@ -1,30 +1,36 @@
 #include "rational.h"
-#include <iostream>
 #include <sstream>
 using namespace std;
-bool checkerc(){
+void checkerc(){
 	Rational a;
-	cin >> a;
-	if (cin.good())
-		cout << a << endl;
-	else
+	if (cin >> a) {
+        a.normalize();
+        cout << "Read success: " << a << endl;
+    }
+    else
 		cout << "Read error :(" << endl;
-	return cin.good();
+	cin.clear();
 }
 bool checkeriss(const string& str) {
-	istringstream iss(str);
-	Rational a;
-	iss >> a;
-	if (iss.good())
-		cout << "Read success: " << str << " -> " << a << endl;
-	else
-		cout << "Read error: " << str << " -> " << a << endl;
-	return iss.good();
+	istringstream istrm(str);
+	Rational z;
+	if (istrm >> z) {
+        z.normalize();
+		cout << "Read success: " << str << " -> " << z << endl;
+		return true;
+	}
+	else {
+		cout << "Read error : " << str << " -> " << z << endl;
+		return false;
+	}
 }
 int main() {
-	checkeriss("4/5");
+	checkeriss("4/a");
 	checkeriss("4 : 5");
 	checkeriss("4 :  5");
 	checkeriss("4 t 5");
+	checkerc();
+	checkerc();
+	checkerc();
 	checkerc();
 }
