@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 2.9)
 project(kirsanov_g_v)
 add_subdirectory(complex)
 add_subdirectory(rational)
 add_subdirectory(vec3d)
+add_subdirectory(quaternion)

@@ -7,11 +7,7 @@ struct Vec3d{
 public:
     Vec3d() = default;
     Vec3d(const double x, const double y, const double z): x(x), y(y), z(z){}
-    Vec3d(const Vec3d& a){
-        x = a.x;
-        y = a.y;
-        z = a.z;
-    }
+    Vec3d(const Vec3d& a) = default;
     ~Vec3d() = default;
     Vec3d normalize();
     double length() const;
@@ -24,8 +20,8 @@ public:
     Vec3d&operator/=(const double a);
     Vec3d&operator*=(const Vec3d& a);
     Vec3d&operator/=(const Vec3d& a);
-    std::istream& readFrom(std::istream& a);
-    std::ostream& writeTo(std::ostream& a)const;
+    std::istream& readFrom(std::istream& ist);
+    std::ostream& writeTo(std::ostream& ost)const;
 private:
     double  x{0.0},
             y{0.0},
