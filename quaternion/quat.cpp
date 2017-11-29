@@ -4,22 +4,26 @@
 
 double eps = 1e-8;
 
-double matrMult(double lu, double ru, double lua, double lda){
+double matrMult(double lu, double ru, double lua, double lda)
+{
     return lu * lua + ru * lda;
 }
 
-bool Quat::operator==(const Quat &a) {
+bool Quat::operator==(const Quat &a) 
+{
     return fabs(lu - a.lu) < eps &&
            fabs(ld - a.ld) < eps &&
            fabs(ru - a.ru) < eps &&
            fabs(rd - a.rd) < eps;
 }
 
-bool Quat::operator!=(const Quat &a) {
+bool Quat::operator!=(const Quat &a) 
+{
     return !operator==(a);
 }
 
-Quat &Quat::operator*=(const double a) {
+Quat &Quat::operator*=(const double a) 
+{
     lu *= a;
     ld *= a;
     ru *= a;
@@ -27,7 +31,8 @@ Quat &Quat::operator*=(const double a) {
     return *this;
 }
 
-Quat& Quat::operator*=(const Quat &a) {
+Quat& Quat::operator*=(const Quat &a) 
+{
     double templu = lu;
     double tempru = ru;
     double templd = ld;
@@ -39,38 +44,108 @@ Quat& Quat::operator*=(const Quat &a) {
     return *this;
 }
 
-Quat &Quat::operator-() {
+Quat &Quat::operator-() 
+{
     Quat t = *this;
     t *= -1;
-    return t;
+    *this = t;
+    return *this;
 }
 
-Quat &Quat::operator=(const Quat &a) {
+Quat &Quat::operator=(const Quat &a) 
+{
     lu = a.lu;
     ld = a.ld;
     rd = a.rd;
     ru = a.ru;
 }
 
-Quat &Quat::operator+=(const Quat &a) {
+Quat &Quat::operator+=(const Quat &a) 
+{
     lu += a.lu;
-    ld += a.rd;
+    ld += a.ld;
     ru += a.ru;
     rd += a.rd;
     return *this;
 }
 
-Quat &Quat::operator-=(Quat &a) {
-    return operator+=(-a);
+Quat& Quat::operator-=(const Quat &a)
+{
+    Quat b = a;
+    b = -b;
+    return operator+=(b);
 }
 
-std::ostream &Quat::writeTo(std::ostream &ost) const {
+Quat operator+(const Quat& lhs, const Quat& rhs)
+{
+    Quat c = lhs;
+    c += rhs;
+    return c;
+}
+
+Quat operator-(const Quat& lhs, const Quat& rhs)
+{
+    Quat c = lhs;
+    c -= rhs;
+    return c;
+}
+
+Quat operator*(const Quat& lhs, const Quat& rhs)
+{
+    Quat c = lhs;
+    c *= rhs;
+    return c;
+}
+
+Quat operator*(const Quat& lhs, const double rhs)
+{
+    Quat c = lhs;
+    c *= rhs;
+    return c;
+}
+
+Quat operator*(const double lhs, const Quat& rhs)
+{
+    Quat c = rhs;
+    c *= lhs;
+    return c;
+}
+
+bool Quat::operator<(const Quat &a)
+{
+    return  ld < a.ld &&
+            rd < a.rd &&
+            lu < a.lu &&
+            ru < a.ru;
+}
+
+bool Quat::operator>(const Quat &a)
+{
+    return  ld > a.ld &&
+            rd > a.rd &&
+            lu > a.lu &&
+            ru > a.ru;
+}
+
+bool Quat::operator<=(const Quat &a)
+{
+    return operator<(a) or operator==(a);
+}
+
+bool Quat::operator>=(const Quat &a)
+{
+    return operator>(a) or operator==(a);
+}
+
+std::ostream &Quat::writeTo(std::ostream &ost) const 
+{
     ost << lu << " " << ru << '\n'
-        << ld << " " << rd;
+        << ld << " " << rd << '\n';
     return ost;
 }
 
-std::istream &Quat::readFrom(std::istream &ist) {
+std::istream &Quat::readFrom(std::istream &ist) 
+{
     double lun{0.0};
     double run{0.0};
     double ldn{0.0};

@@ -7,7 +7,8 @@ struct Quat {
     Quat() = default;
 
     Quat(const double lu, const double ru, const double ld, const double rd) :
-            lu(lu), ru(ru), rd(rd), ld(ld) {
+            lu(lu), ru(ru), rd(rd), ld(ld) 
+    {
 
     }
 
@@ -19,19 +20,23 @@ struct Quat {
 
     bool operator!=(const Quat &a);
 
+    bool operator<(const Quat &a);
+
+    bool operator>(const Quat &a);
+
+    bool operator<=(const Quat &a);
+
+    bool operator>=(const Quat &a);
+
     Quat &operator=(const Quat &a);
 
     Quat &operator+=(const Quat &a);
 
-    Quat &operator-=(Quat &a);
+    Quat &operator-=(const Quat &a);
 
     Quat &operator-();
 
     Quat &operator*=(const Quat &a);
-
-    Quat &operator+=(const double a);
-
-    Quat &operator-=(const double a);
 
     Quat &operator*=(const double a);
 
@@ -45,11 +50,19 @@ struct Quat {
             rd{0.0};
 };
 
-std::ostream &operator<<(std::ostream &ost, const Quat &a) {
+Quat operator+(const Quat& lhs, const Quat& rhs);
+Quat operator-(const Quat& lhs, const Quat& rhs);
+Quat operator*(const Quat& lhs, const Quat& rhs);
+Quat operator*(const Quat& lhs, const double rhs);
+Quat operator*(const double lhs, const Quat& rhs);
+
+inline std::ostream &operator<<(std::ostream &ost, const Quat &a)
+{
     return a.writeTo(ost);
 }
 
-std::istream &operator>>(std::istream &ist, Quat &a) {
+inline std::istream &operator>>(std::istream &ist, Quat &a)
+{
     return a.readFrom(ist);
 }
 
