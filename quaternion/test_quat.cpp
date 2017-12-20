@@ -20,4 +20,7 @@ int main()
 	cout << "a - b\n" << (a - b);
 	cout << "b * 0.5\n" << (b * 0.5);
 	cout << "0.5 * b\n" << (0.5 * b);
+	cout << "b = a\n" << (b = a);
+    Quat ctorCopy(a);
+    cout << "Constructor of copy\n" << ctorCopy;
 }

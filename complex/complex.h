@@ -4,10 +4,11 @@
 #include <iostream>
 #include <vector>
 
-struct Complex {
+struct Complex 
+{
     Complex() {}
 
-    Complex(const Complex &a) = default;
+    Complex(const Complex& a) = default;
 
     ~Complex() = default;
 
@@ -19,25 +20,25 @@ struct Complex {
 
     bool operator!=(const Complex a) { return !operator==(a); }
 
-    Complex &operator=(const Complex &a);
+    Complex& operator=(const Complex& a);
 
-    Complex &operator+=(const Complex &a);
+    Complex& operator+=(const Complex& a);
 
-    Complex &operator+=(const double a);
+    Complex& operator+=(const double a);
 
-    Complex &operator-=(const Complex &a);
+    Complex& operator-=(const Complex& a);
 
-    Complex &operator-=(const double a);
+    Complex& operator-=(const double a);
 
-    Complex &operator*=(const Complex &a);
+    Complex& operator*=(const Complex& a);
 
-    Complex &operator*=(const double a);
+    Complex& operator*=(const double a);
 
-    Complex &operator/=(const Complex &a);
+    Complex& operator/=(const Complex& a);
 
-    Complex &operator/=(const double a);
+    Complex& operator/=(const double a);
 
-    Complex &operator-();
+    Complex& operator-();
 
     std::vector<Complex> roots(int poW);
 
@@ -80,11 +81,13 @@ Complex operator*(const Complex &a, const double b);
 
 Complex operator*(const double a, const Complex &b);
 
-inline std::ostream &operator<<(std::ostream &ostr, const Complex &a) {
+inline std::ostream &operator<<(std::ostream &ostr, const Complex &a) 
+{
     return a.writeTo(ostr);
 }
 
-inline std::istream &operator>>(std::istream &istr, Complex &a) {
+inline std::istream &operator>>(std::istream &istr, Complex &a) 
+{
     return a.readFrom(istr);
 }
 

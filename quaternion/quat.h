@@ -3,7 +3,8 @@
 
 #include <iostream>
 
-struct Quat {
+struct Quat 
+{
     Quat() = default;
 
     Quat(const double lu, const double ru, const double ld, const double rd) :

@@ -21,7 +21,7 @@ public:
 
     bool operator!=(const Vec3d &a) const;
 
-    Vec3d &operator=(const Vec3d &a);
+    Vec3d &operator=(const Vec3d &a) = default;
 
     Vec3d &operator+=(const Vec3d &a);
 

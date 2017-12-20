@@ -26,13 +26,6 @@ Vec3d &Vec3d::normalize() {
     return *this;
 }
 
-Vec3d &Vec3d::operator=(const Vec3d &a) {
-    x = a.x;
-    y = a.y;
-    z = a.z;
-    return *this;
-}
-
 Vec3d &Vec3d::operator+=(const Vec3d &a) {
     x += a.x;
     y += a.y;

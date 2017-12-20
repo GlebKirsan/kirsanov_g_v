@@ -1,8 +1,11 @@
 #include <iostream>
 #include "complex.h"
 #include <sstream>
+
+
 using namespace std;
-void checker(double re0, double im0, double re1, double im1) {
+void checker(double re0, double im0, double re1, double im1) 
+{
 	Complex a(re0, im0), b(re1, im1);
 	Complex zeroTest(0, 0);
 	cout << "Test" << endl;
@@ -27,21 +30,27 @@ void checker(double re0, double im0, double re1, double im1) {
 	cout << "\n\n";
     vector<Complex> t;
     t = Complex(1, 4).roots(6);
-    for (auto &p: t)
-        cout << p << " ";
+    for (auto &p: t) {
+		cout << p << " ";
+	}
     cout << endl;
 }
-bool testParse(const string& str) {
+
+bool testParse(const string& str) 
+{
 	istringstream istrm(str);
 	Complex z;
 	istrm >> z;
-	if (istrm.good())
+	if (istrm.good()) {
 		cout << "Read success: " << str << " -> " << z << endl;
-	else
+	}else {
 		cout << "Read error : " << str << " -> " << z << endl;
+	}
 	return istrm.good();
 }
-int main() {
+
+int main()
+{
 	Complex z;
 	z += Complex(8.0);
 	testParse("{8.9,9}");

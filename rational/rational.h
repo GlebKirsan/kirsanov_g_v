@@ -2,56 +2,61 @@
 #define RATIONAL_2509
 
 #include <iostream>
+#include <stdexcept>
 
-class Rational {
+
+class Rational 
+{
 public:
-    Rational() {};
+    Rational() = default;
 
     Rational(const Rational &a) = default;
 
-    Rational(const int num) : num(num) {};
+    explicit Rational(const int num) : num(num) {};
 
     ~Rational() = default;
 
-    explicit Rational(const int num, const int den) : num(num), den(den) { normalize(); };
+    explicit Rational(const int num, const int den) : num(num), den(den)
+    {
+        if (den == 0)
+            throw std::invalid_argument("Zero division");
+    };
 
-    bool operator==(const Rational &a);
+    bool operator==(const Rational& a);
 
-    bool operator!=(const Rational &a) {
-        return !operator==(a);
-    }
+    bool operator!=(const Rational& a);
 
-    bool operator<(const Rational &a);
+    bool operator<(const Rational& a);
 
-    bool operator>(const Rational &a);
+    bool operator>(const Rational& a);
 
-    bool operator<=(const Rational &a);
+    bool operator<=(const Rational& a);
 
-    bool operator>=(const Rational &a);
+    bool operator>=(const Rational& a);
 
-    Rational &operator+=(const Rational &a);
+    Rational& operator+=(const Rational& a);
 
-    Rational &operator+=(const int a);
+    Rational& operator+=(const int a);
 
-    Rational &operator-=(const Rational &a);
+    Rational& operator-=(const Rational& a);
 
-    Rational &operator-=(const int a);
+    Rational& operator-=(const int a);
 
-    Rational &operator*=(const Rational &a);
+    Rational& operator*=(const Rational& a);
 
-    Rational &operator*=(const int a);
+    Rational& operator*=(const int a);
 
-    Rational &operator/=(const Rational &a);
+    Rational& operator/=(const Rational& a);
 
-    Rational &operator/=(const int a);
+    Rational& operator/=(const int a);
 
-    Rational &operator-();
+    Rational& operator-();
 
-    std::istream &readFrom(std::istream &ist);
+    std::istream& readFrom(std::istream& ist);
 
-    std::ostream &writeTo(std::ostream &ost) const;
+    std::ostream& writeTo(std::ostream& ost) const;
 
-    Rational &normalize();
+    Rational& normalize();
 
 private:
     int num{0},
@@ -60,35 +65,26 @@ private:
     static const char sep1{':'};
 };
 
-Rational operator+(const Rational &a, const Rational &b);
+Rational operator+(const Rational& a, const Rational& b);
+Rational operator-(const Rational& a, const Rational& b);
+Rational operator*(const Rational& a, const Rational& b);
+Rational operator/(const Rational& a, const Rational& b);
+Rational operator+(const Rational& a, const int b);
+Rational operator-(const Rational& a, const int b);
+Rational operator*(const Rational& a, const int b);
+Rational operator/(const Rational& a, const int b);
+Rational operator+(const int a, const Rational& b);
+Rational operator-(const int a, const Rational& b);
+Rational operator*(const int a, const Rational& b);
+Rational operator/(const int a, const Rational& b);
 
-Rational operator-(const Rational &a, const Rational &b);
-
-Rational operator*(const Rational &a, const Rational &b);
-
-Rational operator/(const Rational &a, const Rational &b);
-
-Rational operator+(const Rational &a, const int b);
-
-Rational operator-(const Rational &a, const int b);
-
-Rational operator*(const Rational &a, const int b);
-
-Rational operator/(const Rational &a, const int b);
-
-Rational operator+(const int a, const Rational &b);
-
-Rational operator-(const int a, const Rational &b);
-
-Rational operator*(const int a, const Rational &b);
-
-Rational operator/(const int a, const Rational &b);
-
-inline std::ostream &operator<<(std::ostream &ost, const Rational &a) {
+inline std::ostream& operator<<(std::ostream& ost, const Rational& a) 
+{
     return a.writeTo(ost);
 }
 
-inline std::istream &operator>>(std::istream &ist, Rational &a) {
+inline std::istream& operator>>(std::istream& ist, Rational& a) 
+{
     return a.readFrom(ist);
 }
 

@@ -1,23 +1,25 @@
 #include "rational.h"
 #include <sstream>
 
+
 using namespace std;
 
-void checkerc() {
+void checkerc() 
+{
     Rational a;
     if (cin >> a) {
-        a.normalize();
         cout << "Read success: " << a << endl;
-    } else
+    } else{
         cout << "Read error :(" << endl;
+    }
     cin.clear();
 }
 
-bool checkeriss(const string &str) {
+bool checkeriss(const string &str) 
+{
     istringstream istrm(str);
     Rational z;
     if (istrm >> z) {
-        z.normalize();
         cout << "Read success: " << str << " -> " << z << endl;
         return true;
     } else {
@@ -26,7 +28,8 @@ bool checkeriss(const string &str) {
     }
 }
 
-int main() {
+int main() 
+{
     checkeriss("4/a");
     checkeriss("4 : 5");
     checkeriss("4 :  5");
@@ -34,5 +37,10 @@ int main() {
     checkerc();
     checkerc();
     checkerc();
-    checkerc();
+    Rational a(5,6);
+    Rational b(7,12);
+    Rational c = a + b;
+    cout << a << b << c;
+    cout << "Zero devision test ";
+    cout << Rational(4,0);
 }
